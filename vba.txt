@@ -1,0 +1,105 @@
+Sub stock()
+    
+            Dim lastrow As Long
+            lastrow = Cells(Rows.Count, "A").End(xlUp).Row
+            
+            Dim ticker As String
+            ticker = Cells(2, 1).Value
+            
+            Dim openprice As Double
+            Dim closeprice As Double
+            Dim outputrow As Long
+            outputrow = 2
+            Dim sumcolumn7 As Double
+            sumcolumn7 = 0
+            
+            For i = 2 To lastrow
+            Dim endrow As Long
+            
+            Dim minmax As Range
+            Dim pmax As Double
+            Dim pmin As Double
+            Set minmax = Range("K:K")
+            Dim volmax As Range
+            Set volmax = Range("L:L")
+            Dim vmax As Double
+            
+            '
+            '
+            
+            Cells(1, 9).Value = "Ticker"
+            Cells(1, 10).Value = "Yearly Change"
+            Cells(1, 11).Value = "Percent Change"
+            Cells(1, 12).Value = "Total Stock Volume"
+            Cells(1, 19).Value = "Ticker"
+            Cells(1, 20).Value = "Value"
+            Cells(2, 17).Value = "Greatest % Increase"
+            Cells(3, 17).Value = "Greatest % Decrease"
+            Cells(4, 17).Value = "Greatest Total Volume"
+            
+            '
+            '
+            '
+            '
+            
+                If Cells(i, 1).Value <> ticker Then
+                    endrow = i - 1
+                    Cells(outputrow, 9).Value = ticker
+                    openprice = Cells(2, 3).Value
+                    closeprice = Cells(endrow, 6).Value
+                    Cells(outputrow, 10).Value = closeprice - openprice
+                    Cells(outputrow, 11).Value = ((closeprice - openprice) / openprice) * 100
+                    Cells(outputrow, 12).Value = sumcolumn7
+                    
+                    
+                    ticker = Cells(i, 1).Value
+                    openprice = Cells(i, 3).Value
+                    outputrow = outputrow + 1
+                    sumcolumn7 = 0
+                
+                End If
+                
+                '
+                '
+                '
+                '
+                
+                vmax = Application.WorksheetFunction.Max(volmax)
+                Cells(4, 20).Value = vmax
+                pmax = Application.WorksheetFunction.Max(minmax)
+                Cells(2, 20).Value = pmax
+                pmin = Application.WorksheetFunction.Min(minmax)
+                Cells(3, 20).Value = pmin
+                
+                sumcolumn7 = sumcolumn7 + Cells(i, 7).Value
+                
+                '
+                '
+                '
+                '
+                '
+                
+                        If Cells(outputrow, 10).Value > 0 Then
+                            Cells(outputrow, 10).Interior.Color = RGB(0, 255, 0)
+                        ElseIf Cells(outputrow, 10).Value < 0 Then
+                            Cells(outputrow, 10).Interior.Color = RGB(255, 0, 0)
+                        End If
+                        
+                        '
+
+                        If Cells(outputrow, 11).Value > 0 Then
+                            Cells(outputrow, 11).Interior.Color = RGB(0, 255, 0)
+                        ElseIf Cells(outputrow, 11).Value < 0 Then
+                            Cells(outputrow, 11).Interior.Color = RGB(255, 0, 0)
+                        End If
+                        
+                        '
+                        '
+                        
+            Next i
+                    Cells(outputrow, 9).Value = ticker
+                    closeprice = Cells(endrow, 6).Value
+                    Cells(outputrow, 10).Value = closeprice - openprice
+                    Cells(outputrow, 11).Value = ((closeprice - openprice) / openprice) * 100
+                    Cells(outputrow, 12).Value = sumcolumn7
+End Sub
